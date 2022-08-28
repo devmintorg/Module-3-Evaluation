@@ -13,29 +13,29 @@ This is the repository for the Module 3 evaluation of DevMint. In it, I will dem
 
 ## Automated CLI functions
 
-`npx hardhat highestbidder` - Show who the highest bidder is and how much they bid
-`npx hardhat tokeninfo` - Show what ERC20 token you are bidding with, including the token address
-`npx hardhat nft` - Show what NFT the contract is selling, including the NFT address and NFD id
-`npx hardhat timeleft` - Show how much time is left in the contract, returning the total number of seconds
+- `npx hardhat highestbidder`: Show who the highest bidder is and how much they bid
+- `npx hardhat tokeninfo`: Show what ERC20 token you are bidding with, including the token address
+- `npx hardhat nft`: Show what NFT the contract is selling, including the NFT address and NFD id
+- `npx hardhat timeleft`: Show how much time is left in the contract, returning the total number of seconds
 
 ## Use cases tested
 
-**Deployments**
+### Deployments
 - The contract is successfully deployed to the network
 - The contract must have an auction time in hours, ERC20 token and NFT (plus ID) upon deployment
-**Starting the Auction**
+### Starting the Auction
 - The contract will successfully start when the proper conditions are met
 - The deployer of the contract must have given the contract operator access and the contract deployer is the owner of the NFT
 - The auction cannot be started by anyone other than the contract deployer
 - Bidding cannot start until the auction has been started
-**Bidding**
+### Bidding
 - Bidding cannot start until the auction has been started.
 - A bid can be successfully made by a user who has successfully approved the contract to send ERC20 on their behalf and that they have enough tokens
 - A user who has not approved the contract for ERC20 sending cannot send tokens
 - A user who does not have enough ERC20 tokens cannot make a bid
 - When a new bidder makes a new max bid, their address and bid amount are recorded correctly
 - A bid cannot be made after the bid time has elapsed
-**Ending the Contract**
+### Ending the Contract
 - The 'finalizeAuction' function cannot be called by non-owners
 - The auction cannot be ended until the time has elapsed for the contract
 - The auction successfully send the NFT to the max bidder and sends tokens to the Owner in the expected amounts
@@ -44,7 +44,7 @@ This is the repository for the Module 3 evaluation of DevMint. In it, I will dem
 
 ## Other features
 
-- pre-commit hook tests each case automatically before each commit
+- Pre-commit hook tests each case automatically before each commit
 - Solhint for linting
 - Natspec documentation
 - Secret keeping (but example shown)
