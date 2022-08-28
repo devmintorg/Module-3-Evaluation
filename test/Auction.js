@@ -4,6 +4,7 @@ const { ethers } = require("hardhat");
 
 describe("Auction Contract", function () {
   let auction;
+  let nft;
 
   beforeEach(async function () {
     const [deployer, addr1, addr2, addr3, addr4, addr5] =
@@ -13,7 +14,7 @@ describe("Auction Contract", function () {
     const token = await Token.deploy();
 
     const NFT = await ethers.getContractFactory("MyNFT");
-    const nft = await NFT.deploy();
+    nft = await NFT.deploy();
 
     const Auction = await ethers.getContractFactory("Auction");
     auction = await Auction.deploy(nft.address, token.address, 1);
@@ -23,7 +24,9 @@ describe("Auction Contract", function () {
     it("Should deploy the contract to the network", async function () {
       expect(auction.address).to.exist;
     });
-    it("Should know the auction time in hours, ERC20 token, and NFT(plus ID) upon deployment", async function () {});
+    it("Should know the auction time in hours, ERC20 token, and NFT(plus ID) upon deployment", async function () {
+      expect(await auction.nft()).to.equal(nft.address);
+    });
   });
 
   describe("Starting the Auction", function () {
