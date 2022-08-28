@@ -11,14 +11,14 @@ This is the repository for the Module 3 evaluation of DevMint. In it, I will dem
 - Bids can be made by anyone who both gives approval to the contract to send ERC20 tokens on it's behalf, but also have enough tokens owned by their account to 'approve' the bid.
 - Once the time for the auction has elapsed, the owner can call finalizeAuction to complete the transaction
 
-## Automated CLI functions
+## Automated CLI Functions
 
 - `npx hardhat highestbidder`: Show who the highest bidder is and how much they bid
 - `npx hardhat tokeninfo`: Show what ERC20 token you are bidding with, including the token address
 - `npx hardhat nft`: Show what NFT the contract is selling, including the NFT address and NFD id
 - `npx hardhat timeleft`: Show how much time is left in the contract, returning the total number of seconds
 
-## Use cases tested
+## Use Cases Tested
 
 ### Deployments
 - The contract is successfully deployed to the network
@@ -42,16 +42,16 @@ This is the repository for the Module 3 evaluation of DevMint. In it, I will dem
 - The transfer will fail if the contract does not have access to the tokens or the owners no longer have access to their tokens or NFT
 - The final transfer emits an event with the amount sent to the owner and the NFT sent to the user
 
-## Other features
+## Other Features
 
 - Pre-commit hook tests each case automatically before each commit
 - Solhint for linting
 - Natspec documentation
 - Secret keeping (but example shown)
 
-## Test coverage highlights
+## Test Coverage Highlights
 
-## Slither output
+## Slither Output
 
 ## File Structure
 
