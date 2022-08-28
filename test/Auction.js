@@ -1,5 +1,11 @@
+const { expect } = require("chai");
+const hre = require("hardhat");
+const { time } = require("@nomicfoundation/hardhat-network-helpers");
+
 describe("Deployments", function () {
-  it("Should deploy the contract to the network", async function () {});
+  it("Should deploy the contract to the network", async function () {
+    expect(1).to.equal(2);
+  });
   it("Should know the auction time in hours, ERC20 token, and NFT(plus ID) upon deployment", async function () {});
 });
 
