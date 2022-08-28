@@ -4,7 +4,7 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-abstract contract Auction {
+contract Auction {
     //Some, but not all of your state variables
     uint256 timeOfAuction;
 
@@ -14,17 +14,19 @@ abstract contract Auction {
     address topBidder;
     address topBidAmount;
 
-    IERC721 nft;
-    IERC20 token;
+    IERC721 public immutable nft;
+    IERC20 public immutable token;
 
     //Events
     event auctionStarted();
     event madeBid();
     event auctionFinal();
 
-    constructor(IERC721 _nft, IERC20 _token) {
+    constructor(IERC721 _nft, IERC20 _token, uint256 _timeInHours) {
         nft = _nft;
         token = _token;
+        timeOfAuction = block.timestamp;
+        auctionEndTime = block.timestamp * 1 hours + _timeInHours;
     }
 
     function startAuction() external {}
