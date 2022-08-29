@@ -5,10 +5,17 @@ const { ethers } = require("hardhat");
 describe("Auction Contract", function () {
   let auction;
   let nft;
+  const nftId = 0;
+
+  let deployer;
+  let addr1;
+  let addr2;
+  let addr3;
+  let addr4;
+  let addr5;
 
   beforeEach(async function () {
-    const [deployer, addr1, addr2, addr3, addr4, addr5] =
-      await ethers.getSigners();
+    [deployer, addr1, addr2, addr3, addr4, addr5] = await ethers.getSigners();
 
     const Token = await ethers.getContractFactory("MyToken");
     const token = await Token.deploy();
@@ -16,8 +23,17 @@ describe("Auction Contract", function () {
     const NFT = await ethers.getContractFactory("MyNFT");
     nft = await NFT.deploy();
 
+    nft.safeMint(deployer.address, nftId);
+
     const Auction = await ethers.getContractFactory("Auction");
-    auction = await Auction.deploy(nft.address, token.address, 1);
+    auction = await Auction.deploy(nft.address, nftId, token.address, 1);
+
+    nft.approve(auction.address, nftId);
+    token.mint(addr1, ethers.utils.formatEther(100));
+    token.mint(addr2, ethers.utils.formatEther(100));
+    token.mint(addr3, ethers.utils.formatEther(100));
+    token.mint(addr4, ethers.utils.formatEther(100));
+    token.mint(addr5, ethers.utils.formatEther(100));
   });
 
   describe("Deployments", function () {
@@ -30,10 +46,24 @@ describe("Auction Contract", function () {
   });
 
   describe("Starting the Auction", function () {
-    it("Should start the auction when the proper conditions are met", async function () {});
-    it("Should be given access to the NFT by the deployer/owner before starting the auction", async function () {});
-    it("Should not be able to be started by anyone other than the deployer", async function () {});
-    it("Should not let bidding to start until the auction has been started", async function () {});
+    it("Should start the auction when the proper conditions are met", async function () {
+      await auction.startAuction();
+      expect(await auction.auctionOpen()).to.equal(true);
+    });
+    it("Should have be given access to the NFT by the deployer (who is also the owner) before starting the auction", async function () {
+      expect((await nft.ownerOf(nftId)) === deployer.address);
+      expect((await nft.getApproved(nftId)) === auction.address);
+    });
+    it("Should not be able to be started by anyone other than the deployer", async function () {
+      await expect(auction.connect(addr1).startAuction()).to.be.revertedWith(
+        "Ownable: caller is not the owner"
+      );
+    });
+    it("Should not let bidding to start until the auction has been started", async function () {
+      await expect(auction.connect(addr1).bid()).to.be.revertedWith(
+        "Auction not open"
+      );
+    });
   });
 
   describe("Bidding", function () {
