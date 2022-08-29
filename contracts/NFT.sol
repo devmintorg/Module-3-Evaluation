@@ -7,6 +7,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./Token.sol";
 
+/// @title TurdNFT
+/// @author Marwan Nakhaleh
 contract TurdNFT is ERC721, ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
 
@@ -18,10 +20,12 @@ contract TurdNFT is ERC721, ERC721Enumerable, Ownable {
         token = _token;
     }
 
+    /// @dev return the base URI; we're not really making use of this
     function _baseURI() internal pure override returns (string memory) {
         return "https://google.com";
     }
 
+    /// @dev allow the owner to safely mint an NFT to a specific address
     function safeMint(address to) external onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();

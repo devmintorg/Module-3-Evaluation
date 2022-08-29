@@ -22,10 +22,11 @@ describe("Auction", function () {
     NFT = await hre.ethers.getContractFactory("TurdNFT");
     nft = await NFT.deploy(token.address);
 
-    await nft.connect(owner).safeMint(owner);
+    await nft.connect(owner).safeMint(owner.address); // TurnNFT#0 is minted
 
     Auction = await hre.ethers.getContractFactory("Auction");
-    auction = await Auction.deploy(24, token.address, nft.address);
+    auction = await Auction.deploy(24, 0, token.address, nft.address);
+    await nft.connect(owner).approve(auction.address, 0);
   });
 
   describe("Deployment", function () {
@@ -154,11 +155,13 @@ describe("Auction", function () {
     it("The auction successfully send the NFT to the max bidder and sends tokens to the Owner in the expected amounts", async function () {
       await hre.network.provider.send("evm_increaseTime", [60*60*24]);
       await hre.network.provider.send("evm_mine");
-
       await auction.connect(owner).finalizeAuction();
     });
 
-    it("The transfer will fail if the contract does not have access to the tokens or the owners no longer have access to their tokens or NFT", async function () {});
+    it("The transfer will fail if the contract does not have access to the tokens or the owners no longer have access to their tokens or NFT", async function () {
+
+    });
+
     it("The final transfer emits an event with the amount sent to the owner and the NFT sent to the user", async function () {});
   });
 });
