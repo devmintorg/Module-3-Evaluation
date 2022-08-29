@@ -1,6 +1,8 @@
 require("@nomicfoundation/hardhat-toolbox");
 require('hardhat-docgen');
 require("dotenv").config();
+require('solidity-coverage')
+
 
 task("highestBidder", "Show who the highest bidder is and how much they bid")
     .setAction(async ( taskArgs ) => {

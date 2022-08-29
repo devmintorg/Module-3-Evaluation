@@ -12,7 +12,7 @@ error ExchangeFailed(uint256 nftCost, uint256 nftId);
 contract Auction is Ownable {
 
     //Some, but not all of your state variables
-    uint256  timeOfAuction;
+    uint256 timeOfAuction;
 
     uint256 auctionEndTime;
     uint256 auctionFinalized;
@@ -27,8 +27,7 @@ contract Auction is Ownable {
 
     //Events
     event auctionStarted();
-    event bidMade();
-    event bidWithdrawn();
+    event bidMade(address bidder, uint256 amount);
     event auctionEnded(address recipient, IERC20 token, uint256 amount);
 
     modifier approvedToSpendXTokens(uint numTokens) {
@@ -72,15 +71,18 @@ contract Auction is Ownable {
     function startAuction() external onlyOwner {
         timeOfAuction = block.timestamp;
         auctionEndTime = timeOfAuction +  (numberOfHours * 1 hours);
+        emit auctionStarted();
     }
 
     function bid(uint256 amount) external payable auctionHasStarted auctionHasNotEnded hasEnoughTokensToBid(amount) approvedToSpendXTokens(amount) bidIsHighEnough(amount) {
         topBidAmount = amount;
         topBidder = msg.sender;
+        emit bidMade(msg.sender, amount);
     }
 
     function finalizeAuction() external onlyOwner auctionHasStarted auctionHasEnded { 
-        IERC20(token).transferFrom(topBidder, msg.sender, topBidAmount);
+        bool tokensHaveTransferred = IERC20(token).transferFrom(topBidder, msg.sender, topBidAmount);
+        require(tokensHaveTransferred, "token transfer failed!");
         IERC721(nft).safeTransferFrom(msg.sender, topBidder, nftId);
         emit auctionEnded(topBidder, token, topBidAmount);
     }
