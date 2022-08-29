@@ -26,7 +26,6 @@ describe("Auction", function () {
 
     Auction = await hre.ethers.getContractFactory("Auction");
     auction = await Auction.deploy(24, 0, token.address, nft.address);
-    await nft.connect(owner).approve(auction.address, 0);
   });
 
   describe("Deployment", function () {
@@ -155,13 +154,25 @@ describe("Auction", function () {
     it("The auction successfully send the NFT to the max bidder and sends tokens to the Owner in the expected amounts", async function () {
       await hre.network.provider.send("evm_increaseTime", [60*60*24]);
       await hre.network.provider.send("evm_mine");
+
+      await nft.connect(owner).approve(auction.address, 0);
       await auction.connect(owner).finalizeAuction();
     });
 
     it("The transfer will fail if the contract does not have access to the tokens or the owners no longer have access to their tokens or NFT", async function () {
+      await hre.network.provider.send("evm_increaseTime", [60*60*24]);
+      await hre.network.provider.send("evm_mine");
 
+      //await nft.connect(owner).approve(auction.address, 0);
+      await expect(auction.connect(owner).finalizeAuction()).to.be.revertedWith("ERC721: caller is not token owner nor approved");
     });
 
-    it("The final transfer emits an event with the amount sent to the owner and the NFT sent to the user", async function () {});
+    it("The final transfer emits an event with the amount sent to the owner and the NFT sent to the user", async function () {
+      await hre.network.provider.send("evm_increaseTime", [60*60*24]);
+      await hre.network.provider.send("evm_mine");
+
+      await nft.connect(owner).approve(auction.address, 0);
+      await expect(auction.connect(owner).finalizeAuction()).to.emit(auction, "auctionEnded").withArgs(addr1.address, token.address, hre.ethers.utils.parseEther("100"));
+    });
   });
 });

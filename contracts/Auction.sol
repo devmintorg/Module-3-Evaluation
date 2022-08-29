@@ -81,7 +81,7 @@ contract Auction is Ownable {
 
     function finalizeAuction() external onlyOwner auctionHasStarted auctionHasEnded { 
         IERC20(token).transferFrom(topBidder, msg.sender, topBidAmount);
-        //IERC721(nft).safeTransferFrom(msg.sender, address(this), nftId);
         IERC721(nft).safeTransferFrom(msg.sender, topBidder, nftId);
+        emit auctionEnded(topBidder, token, topBidAmount);
     }
 }
