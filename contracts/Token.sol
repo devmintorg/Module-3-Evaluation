@@ -6,10 +6,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title MyToken ERC20 Ownable
 /// @author Ann Schnabel
-/// @notice One million (1,000,000) tokens generated upon deployment
+/// @notice No tokens generated upon deployment
 contract MyToken is ERC20, Ownable {
     constructor() ERC20("MyToken", "MTK") {
-        _mint(msg.sender, 1000000 * 10 ** decimals());
+        // _mint(msg.sender, 1000000 * 10 ** decimals());
     }
 
     /// @dev Minting can only be done by owner of contract
