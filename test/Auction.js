@@ -143,7 +143,7 @@ describe("Auction Contract", function () {
       await hre.network.provider.send("evm_increaseTime", [60 * 60 * 2]);
       await hre.network.provider.send("evm_mine");
       await expect(auction.finalizeAuction())
-        .to.emit(auction, "auctionFinal")
+        .to.emit(auction, "AuctionFinal")
         .withArgs(1, nftId);
     });
   });
